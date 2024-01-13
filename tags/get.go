@@ -7,7 +7,7 @@ import (
 )
 
 func getTagByID(c *fiber.Ctx) error {
-	var tag = new(Tags)
+	var tag = new(Tag)
 	err := db.FindByID("tags", c.Params("id"), tag)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(err.Error())
@@ -16,8 +16,8 @@ func getTagByID(c *fiber.Ctx) error {
 }
 
 func getTags(c *fiber.Ctx) error {
-	var tag = new([]Tags)
-	err := db.Find("tags", tag)
+	var tag = new([]Tag)
+	err := db.Find("tags", nil, tag)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(err.Error())
 	}

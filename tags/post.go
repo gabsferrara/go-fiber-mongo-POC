@@ -7,7 +7,7 @@ import (
 )
 
 func insertTags(c *fiber.Ctx) error {
-	var tag = new(Tags)
+	var tag = new(Tag)
 	err := c.BodyParser(tag)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(err.Error())

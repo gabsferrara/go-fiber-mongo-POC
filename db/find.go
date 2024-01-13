@@ -6,13 +6,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func Find(collection string, documents any) error {
+func Find(collection string, filter bson.M, documents any) error {
 	client, ctx := getConnection()
 	defer client.Disconnect(ctx)
 
 	c := client.Database(dbname).Collection(collection)
 
-	cursor, err := c.Find(context.Background(), bson.D{})
+	if filter == nil {
+		filter = bson.M{}
+	}
+
+	cursor, err := c.Find(context.Background(), filter)
 	if err != nil {
 		return err
 	}
@@ -34,5 +38,12 @@ func FindByID(collection, id string, document any) error {
 	filter := bson.M{"_id": objectID}
 
 	return c.FindOne(context.Background(), filter).Decode(document)
+}
 
+func FindOne(collection string, filter bson.M, document any) error {
+	client, ctx := getConnection()
+	defer client.Disconnect(ctx)
+
+	c := client.Database(dbname).Collection(collection)
+	return c.FindOne(context.Background(), filter).Decode(document)
 }
